@@ -63,9 +63,15 @@ async def send_file(writer, file):
 async def server(reader, writer):
     req = await reader.readline()
     print(req)
-    method, uri, proto = req.split(b" ")
-    m = re.match(url_pat, uri)
-    route_req = m.group(5)
+    try:
+        method, uri, proto = req.split(b" ")
+        m = re.match(url_pat, uri)
+        route_req = m.group(5)
+    except Exception as e:
+        print("Malformed request: {}".format(req))
+        writer.close
+        await writer.close()
+        return
 
     while True:
         h = await reader.readline()
