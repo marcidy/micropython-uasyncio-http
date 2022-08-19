@@ -69,8 +69,8 @@ async def server(reader, writer):
         route_req = m.group(5)
     except Exception as e:
         print("Malformed request: {}".format(req))
-        writer.close
-        await writer.close()
+        writer.close()
+        await writer.wait_closed()
         return
 
     while True:
